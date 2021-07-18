@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace</title>
+</head>
+
+<body>
+    <div class='wrapper'>
+
+        <div class='header'>
+            <h1>Welcome to the Marketplace, {{user.first_name}}</h1>
+            <button><a href="/logout">Logout</a></button>
+        </div>
+
+        <div class='main_page'>
+            <div class='left_half'>
+                <button><a href="/help">Contact Us</a></button>
+                <button><a href="/home">Blog</a></button>
+                <button><a href="/my_account/{{user.id}}">My Account</a></button>
+                <button><a href="/invite">Invite</a></button>
+                <h1>All items are listed below</h1>
+            </div>
+
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <ul>
+                {% for each_item in all_items %}
+                <h3>
+                    Name: {{each_item.product_name}}/Brand: {{each_item.item_brand}} 
+                    Description: {{each_item.item_description}} 
+                    listed for ${{each_item.item_price}} 
+                    by: {{each_item.owner.first_name}} 
+                    contact info: {{each_item.contact_info}}
+                    
+                    {% if each_item.owner.id == request.session.user_id %}
+                    <form action='/marketplace/delete_item/{{each_item.id}}' method="POST">
+                    {% csrf_token %}
+                    <button>Delete</button>
+                    </form>
+                    <form action='/marketplace/update_item/{{each_item.id}}' method="POST">
+                    {% csrf_token %}
+                    <button>Update</button>
+                    </form>
+                    {% endif %}
+                    <button><a href="/marketplace/{{each_item.id}}">More</a></button>
+                </h3>
+                {% endfor %}
+            </ul>
+            <h1>Add a product to sell</h1>
+            <form action="/marketplace/create_item" method="POST">
+                {% csrf_token %}
+                <div>
+                    <label>Product Name</label>
+                    <input type="product_name" name="product_name">
+                </div>
+                <div>
+                    <label>Brand</label>
+                    <input type="item_brand" name="item_brand">
+                </div>
+                <div>
+                    <label>Description</label>
+                    <input type="item_description" name="item_description">
+                </div>
+                <div>
+                    <label>Price</label>
+                    <input type="item_price" name="item_price">
+                </div>
+                <div>
+                    <label>Contact Information</label>
+                    <input type="contact_info" name="contact_info">
+                </div>
+                <!-- {% if user not in item.user_sold_item.all %}
+                    <div>
+                        <label>Sold?</label>
+                        <input type="item_brand" name="item_brand" >
+                    </div>
+                    <p><a href='/marketplace/mark_sold/{{item.id}}'>Sold!</a></p>
+                    {% endif %} -->
+                <button>Add</button>
+        </div>
+        <div class='right_half'>
+
+        </div>
+
+    </div>
+    </div>
+</body>
+
+</html>

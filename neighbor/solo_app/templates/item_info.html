@@ -14,41 +14,31 @@
     <div class='wrapper'>
         <div class='header'>
             <h1>{{item.product_name}}</h1>
-            <button><a href="/home">Go Back</a></button>
+            <button><a href="/marketplace">Go Back</a></button>
             <button><a href="/logout">Log Out</a></button>
         </div>
         <div class='main_page'>
             <div class='left_half'>
-                {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-                <form action="/marketplace/updated/{{item.id}}" method="POST">
-                    {% csrf_token %}
                     <div>
                         <label>Product Name</label>
-                        <input type="product_name" name="product_name" value="{{item.product_name}}">
+                        <p>{{item.product_name}}</p>
                     </div>
                     <div>
                         <label>Brand</label>
-                        <input type="item_brand" name="item_brand" value="{{item.item_brand}}">
+                        <p>{{item.item_brand}}</p>
                     </div>
                     <div>
                         <label>Description</label>
-                        <input type="item_description" name="item_description" value='{{item.item_description}}'>
+                        <p>{{item.item_description}}</p>
                     </div>
                     <div>
                         <label>Price</label>
-                        <input type="item_price" name="item_price" value="{{item.item_price}}">
+                        <p>${{item.item_price}}</p>
                     </div>
                     <div>
                         <label>Contact Information</label>
-                        <input type="contact_info" name="contact_info" value="{{item.contact_info}}">
+                        <p>{{item.owner.first_name}} {{item.owner.last_name}}: {{item.contact_info}}</p>
                     </div>
-                    <button>Update</button>
             </div>
             
         </div>

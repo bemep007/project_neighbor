@@ -20,7 +20,6 @@
 
         <div class='main_page'>
             <div class='left_half'>
-                <button><a href="/register_page">Register</a></button>
 
                 <h1>Welcome Home! The blog will be shown below</h1>
             </div>
@@ -30,27 +29,27 @@
             <button><a href="/invite">Invite</a></button>
             <ul>
                 {% for post in all_posts %}
-                <h3>{{post.title}} -make it bold ---- then text: {{post.p_text}}</h3>
+                <h3>{{post.title}} -make it bold ---- then text: {{post.b_text}}</h3>
                 <p>Posted by <a href="/user/{{post.creator.id}}">{{post.creator.first_name}}
-                        {{post.creator.last_name}}</a></p>
+                        {{post.creator.last_name}}</a> on {{post.updated_at}}</p>
                 {% if post.creator.id == request.session.user_id %}
-                <form action='/delete_post/{{post.id}}' method="POST">
+                <form action='/home/delete_post/{{post.id}}' method="POST">
                     {% csrf_token %}
                     <button>Delete this post</button>
                 </form>
                 {% endif %}
                 <p>{{post.liked_by.count}} people like this</p>
                 {% if user not in post.liked_by.all %}
-                <p><a href='/like_post/{{post.id}}'>Like!</a></p>
+                <p><a href='/home/like_post/{{post.id}}'>Like!</a></p>
                 {% else %}
-                <p>You liked it! <a href='/dislike_post/{{post.id}}'>Dislike!</a></p>
+                <p>You liked it! <a href='/home/dislike_post/{{post.id}}'>Dislike!</a></p>
                 {% endif %}
                 {% endfor %}
             </ul>
         </div>
         <div class='right_half'>
             <h1>Add a Post!</h1>
-            <form action='/create_post' method="POST">
+            <form action='home/create_post' method="POST">
                 {% csrf_token %}
                 {% for message in messages %}
                 <p class="text-danger small">{{ message }}</p>
@@ -58,7 +57,7 @@
                 <div class='cell'>
                     <label>Title: <input type='textarea' name='title'></label>
                     <label>Post:</label>
-                    <textarea name="p_text" cols="30" rows="6"></textarea>
+                    <textarea name="b_text" cols="30" rows="6"></textarea>
                     <input type="submit" value="Submit">
                 </div>
             </form>

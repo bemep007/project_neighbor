@@ -51,6 +51,18 @@
                     <button>Update</button>
             </div>
             <div class='right_half'>
+                <h1>Invited neighbors</h1>
+                <ul>
+                    {% for each_invite in user.has_invited_neighbor.all %}
+                    <h3>{{each_invite.first_name}} {{each_invite.last_name}} on {{each_invite.street_address}}</h3>
+                    {% endfor %}
+                </ul>
+                <h1>Questions Asked</h1>
+                <ul>
+                    {% for each_question in user.asked_question.all %}
+                    <h3>{{each_question.title}} {{each_question.q_text}} on {{each_question.created_at}}</h3>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>

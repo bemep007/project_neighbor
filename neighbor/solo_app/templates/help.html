@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us!</title>
+</head>
+
+<body>
+    <div class='wrapper'>
+
+        <div class='header'>
+            <h1>Send us a note, a question, a feedback, {{user.first_name}}</h1>
+            <button><a href="/logout">Logout</a></button>
+        </div>
+
+        <div class='main_page'>
+            <div class='left_half'>
+
+            </div>
+            <button><a href="/home">Blog</a></button>
+            <button><a href="/marketplace">Marketplace</a></button>
+            <button><a href="/my_account/{{user.id}}">My Account</a></button>
+            <button><a href="/invite">Invite</a></button>
+        </div>
+        <div class='right_half'>
+            <form action='help/done' method="POST">
+                {% csrf_token %}
+                {% for message in messages %}
+                <p class="text-danger small">{{ message }}</p>
+                {% endfor %}
+                <div class='cell'>
+                    <label>Title: <input type='textarea' name='title'></label>
+                    <label>Content:</label>
+                    <textarea name="q_text" cols="30" rows="6"></textarea>
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+
+    </div>
+    </div>
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
-from .models import Invited, User, Blogpost, Item
+from .models import Invited, User, Blogpost, Item, Question
 
 
 
@@ -79,39 +79,39 @@ def logout(request):
 
 def create_post(request):
     if request.method =='GET':
-        return redirect('/blog')
+        return redirect('/home')
     errors = Blogpost.objects.post_validator(request.POST)
 
     if len(errors):
         for key, value in errors.items():
             messages.error(request, value)
-        return redirect('/blog')
+        return redirect('/home')
     else:
         user = User.objects.get(id=request.session["user_id"])
-        Blogpost.objects.create(author=request.POST['author'], b_text=request.POST['b_text'], creator=user)
-        return redirect('/blog')
+        Blogpost.objects.create(title=request.POST['title'], b_text=request.POST['b_text'], creator=user)
+        return redirect('/home')
 
-def delete_post(request, quote_id):
+def delete_post(request, post_id):
     if request.method =='GET':
-        return redirect('/blog')
-    delete_this= Blogpost.objects.get(id=quote_id)
+        return redirect('/home')
+    delete_this= Blogpost.objects.get(id=post_id)
     delete_this.delete()
-    return redirect('/blog')
+    return redirect('/home')
 
 # like this post
 def like_post(request, post_id):
     user = User.objects.get(id=request.session["user_id"])
-    quote = Blogpost.objects.get(id=post_id)
-    user.user_liked_post.add(quote)
+    post = Blogpost.objects.get(id=post_id)
+    user.user_liked_post.add(post)
 
-    return redirect('/blog')
+    return redirect('/home')
 
 # dislike this post
 def dislike_post(request, post_id):
     user = User.objects.get(id=request.session["user_id"])
     post = Blogpost.objects.get(id=post_id)
     user.user_liked_post.remove(post)
-    return redirect('/blog')
+    return redirect('/home')
 
 # # show post for the user
 # def show_post(request, user_id):
@@ -161,7 +161,13 @@ def invited(request):
             messages.error(request, e)
         return redirect('/invite')
     else:
-        Invited.objects.invited_user(request.POST)
+        user = User.objects.get(id=request.session["user_id"])
+        Invited.objects.create(first_name = request.POST['first_name'],
+            last_name = request.POST['last_name'],
+            street_address = request.POST['street_address'],
+            zip_code = request.POST['zip_code'],
+            email = request.POST['email'],
+            invited_by = user)
         return redirect('/invite/sent')
 
 # marketplace
@@ -172,9 +178,94 @@ def marketplace(request):
     }
     return render(request, 'marketplace.html', context)
 
-# marketplace
+def create_item(request):
+    if request.method =='GET':
+        return redirect('/')
+    errors = Item.objects.item_validator(request.POST)
+
+    if len(errors):
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect('/marketplace')
+    else:
+        user = User.objects.get(id=request.session["user_id"])
+        Item.objects.create(product_name=request.POST['product_name'],
+        item_description=request.POST['item_description'], 
+        item_price=request.POST['item_price'], 
+        contact_info=request.POST['contact_info'], 
+        item_brand=request.POST['item_brand'],
+        owner=user)
+        return redirect('/marketplace')
+
+# more information about the item
+def update_item(request, item_id):
+    context = {
+        'user' : User.objects.get(id=request.session["user_id"]),
+        'item' : Item.objects.get(id=item_id),
+    }
+    return render(request, 'update_item.html', context)
+
+def item_updated(request, item_id):
+    update_this_item=Item.objects.get(id=item_id)
+    errors = Item.objects.updateme(request.POST)
+    if errors:
+        for e in errors.values():
+            messages.error(request, e)
+        return redirect(f'/marketplace/update_item/{item_id}')
+    else:
+        update_this_item.product_name = request.POST['product_name']
+        update_this_item.item_description = request.POST['item_description']
+        update_this_item.item_price = request.POST['item_price']
+        update_this_item.contact_info = request.POST['contact_info']
+        update_this_item.item_brand = request.POST['item_brand']
+        update_this_item.save()
+    return redirect(f'/marketplace/update_item/{item_id}')
+
+def delete_item(request, item_id):
+    if request.method =='GET':
+        return redirect('/')
+    delete_this= Item.objects.get(id=item_id)
+    delete_this.delete()
+    return redirect('/marketplace')
+
+def mark_sold(request, item_id):
+    user = User.objects.get(id=request.session["user_id"])
+    item = Item.objects.get(id=item_id)
+    user.user_sold_item.add(item)
+
+    return redirect('/home')
+
+# more information about the item
+def item_info(request, item_id):
+    context = {
+        'user' : User.objects.get(id=request.session["user_id"]),
+        'item' : Item.objects.get(id=item_id),
+    }
+    return render(request, 'item_info.html', context)
+
+
+# contact us section
 def help(request):
     context = {
         'user': User.objects.get(id=request.session['user_id']),
     }
     return render(request, 'help.html', context)
+
+def question_confirmation(request):
+
+    return render(request, 'question_sent.html')
+
+def question_sent(request):
+    if request.method == "GET":
+        return redirect('/')
+    errors = Question.objects.validate(request.POST)
+    if errors:
+        for e in errors.values():
+            messages.error(request, e)
+        return redirect('/help')
+    else:
+        user = User.objects.get(id=request.session["user_id"])
+        Question.objects.create(title = request.POST['title'],
+            q_text = request.POST['q_text'],
+            creator = user)
+        return redirect('/help/post')
