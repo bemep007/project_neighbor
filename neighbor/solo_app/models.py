@@ -79,6 +79,46 @@ class User(models.Model):
 
     objects = UserManager()
 
+
+class InvitedManager(models.Manager):
+    def validate(self, post_data):
+        errors = {}
+        if len(post_data['first_name']) < 2:
+            errors['first_name'] = 'First Name must be at least 2 characters'
+
+        if len(post_data['last_name']) < 2:
+            errors['last_name'] = 'Last Name must be at least 2 characters'
+        if len(post_data['street_address']) < 2:
+            errors['street_address'] = 'Street address must be at least 2 characters'
+
+        if len(post_data['zip_code']) != 5:
+            errors['zip_code'] = 'Zipcode must be 5 characters long'
+
+        if not EMAIL_REGEX.match(post_data['email']):
+            errors['email'] = 'Invalid Email Address'
+        
+        email_check = self.filter(email=post_data['email'])
+        if email_check:
+            errors['email'] = "Email already in use"
+        
+        return errors
+    def invited_user(self, post_data):
+        return self.create(
+            first_name = post_data['first_name'],
+            last_name = post_data['last_name'],
+            street_address = post_data['street_address'],
+            zip_code = post_data['zip_code'],
+            email = post_data['email'],
+    )
+
+class Invited(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    street_address = models.CharField(max_length=255)
+    zip_code = models.IntegerField(max_length=5)
+    email = models.EmailField(unique=True)
+
+    objects = InvitedManager()
 # BLOG PORTION
 
 class BlogManager(models.Manager):
@@ -93,7 +133,7 @@ class BlogManager(models.Manager):
         return errors
 
 class Blogpost(models.Model):
-    author = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
     b_text = models.CharField(max_length=255)
     creator = models.ForeignKey(User, related_name="has_created_post", on_delete=models.CASCADE)
     liked_by = models.ManyToManyField(User, related_name="user_liked_post")

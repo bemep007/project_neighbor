@@ -11,26 +11,35 @@ urlpatterns = [
     path('logout', views.logout),
     path('login_page', views.login_page),
     path('register_page', views.register_page),
-    path('password_page', views.password_page),
-    path('password_restore', views.password_restore),
+
+    # path('password_reset', views.password_reset),
+    # path('password_reset/done/', views.password_reset_done),
+    # path('password_change', views.password_change),
+    # path('password_change/done/', views.password_change_done),
+
     # blog portion
-    # path('blog', views.blog),
-    # path('create_post', views.create_post),
-    # path('like_post/<int:post_id>', views.like_post),
-    # path('dislike_post/<int:post_id>', views.dislike_post),
-    # path('delete_post/<int:post_id>', views.delete_post),
-    # path('user/<int:user_id>', views.show_posts),
-    # # comments
+    
+    # path('home/create_post', views.create_post),
+    # path('home/like_post/<int:post_id>', views.like_post),
+    # path('home/dislike_post/<int:post_id>', views.dislike_post),
+    # path('home/delete_post/<int:post_id>', views.delete_post),
+
+    
 
     # # account edit portion
-    # path('myaccount/<int:user_id>', views.show_account),
-    # path('myaccount/<int:user_id>/update', views.update_account),
+    path('my_account/<int:user_id>', views.my_account),
+    path('my_account/<int:user_id>/update', views.update_account),
 
     # # marketplace portion
-    # path('marketplace', views.marketplace),
-    # path('create_item', views.create_item),
-    # path('mark_sold/<int:item_id>', views.mark_sold),
-    # path('update_item/<int:item_id>', views.update_item),
-    # path('delete_item/<int:item_id>', views.delete_item),
-    # path('user/<int:user_id>', views.show_user_info),
+    path('marketplace', views.marketplace),
+    # path('marketplace/create_item', views.create_item),
+    # path('marketplace/mark_sold/<int:item_id>', views.mark_sold),
+    # path('marketplace/update_item/<int:item_id>', views.update_item),
+    # path('marketplace/delete_item/<int:item_id>', views.delete_item),
+
+    # path('home/user/<int:user_id>', views.show_user_info),
+    path('invite', views.invite_user),
+    path('invite/done', views.invited),
+    path('invite/sent', views.invite_confirmation),
+    path('help', views.help),
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
-from .models import User, Blogpost, Item
+from .models import Invited, User, Blogpost, Item
 
 
 
@@ -10,9 +10,10 @@ def index(request):
 
 def index_authorized(request):
     context ={
+        'all_posts': Blogpost.objects.all().order_by('created_at')[:13],
         'user': User.objects.get(id=request.session['user_id']),
     }
-    return render(request, 'index_authorized.html', context)
+    return render(request, 'blog.html', context)
 
 def register_page(request):
     return render(request, 'registration.html')
@@ -49,21 +50,32 @@ def logout(request):
     
     return redirect('/')
 
-def password_page(request):
-    return render(request, 'password_restore.html')
+# def password_reset(request):
+#     return render(request, 'password_reset.html')
 
-def password_restore(request):
+# def password_reset_request(request):
+#     if request.method == "GET":
+#         return redirect('/password_reset')
     
-    return redirect('/')
+#     user = User.objects.get(email=request.POST['email'])
+#     request.session['user_id'] = user.id
+#     request.session['user_email'] = user.email
+#     return redirect('/home')
+
+# def password_reset_done(request):
+    
+#     return render(request, 'password_reset_done.html')  
+
+# def password_change(request):
+    
+#     return render(request, 'password_change.html')
+
+# def password_reset_done(request):
+    
+#     return render(request, 'password_reset_done.html')   
 
 # Blog portion of the app.
 # render the main news/blog page, wall of posts plus add post functionality
-def all_posts(request):
-    context = {
-        'all_posts': Blogpost.objects.all().order_by('created_at')[:13],
-        'user': User.objects.get(id=request.session['user_id']),
-    }
-    return render(request, 'blog.html', context)
 
 def create_post(request):
     if request.method =='GET':
@@ -110,11 +122,11 @@ def dislike_post(request, post_id):
 
 # Account portion of the app.
 
-def show_account(request, user_id):
+def my_account(request, user_id):
     context = {
         'user': User.objects.get(id=user_id),
     }
-    return render(request, 'account_info.html', context)
+    return render(request, 'my_account.html', context)
 
 def update_account(request, user_id):
     update_this_user=User.objects.get(id=user_id)
@@ -122,7 +134,7 @@ def update_account(request, user_id):
     if errors:
         for e in errors.values():
             messages.error(request, e)
-        return redirect(f'/myaccount/{user_id}')
+        return redirect(f'/my_account/{user_id}')
     else:
         update_this_user.first_name = request.POST['first_name']
         update_this_user.last_name = request.POST['last_name']
@@ -130,4 +142,39 @@ def update_account(request, user_id):
         update_this_user.zip_code = request.POST['zip_code']
         update_this_user.email = request.POST['email']
         update_this_user.save()
-    return redirect(f'/myaccount/{user_id}')
+    return redirect(f'/my_account/{user_id}')
+
+def invite_user(request):
+
+    return render(request, 'invite.html')
+
+def invite_confirmation(request):
+
+    return render(request, 'invitation_sent.html')
+
+def invited(request):
+    if request.method == "GET":
+        return redirect('/')
+    errors = Invited.objects.validate(request.POST)
+    if errors:
+        for e in errors.values():
+            messages.error(request, e)
+        return redirect('/invite')
+    else:
+        Invited.objects.invited_user(request.POST)
+        return redirect('/invite/sent')
+
+# marketplace
+def marketplace(request):
+    context = {
+        'all_items': Item.objects.all().order_by('created_at')[:13],
+        'user': User.objects.get(id=request.session['user_id']),
+    }
+    return render(request, 'marketplace.html', context)
+
+# marketplace
+def help(request):
+    context = {
+        'user': User.objects.get(id=request.session['user_id']),
+    }
+    return render(request, 'help.html', context)
