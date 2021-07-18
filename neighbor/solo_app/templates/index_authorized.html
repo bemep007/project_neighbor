@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to my neighborhood</title>
+</head>
+
+<body>
+    <div class='wrapper'>
+
+        <div class='header'>
+            <h1>Welcome back, {{user.first_name}}</h1>
+            <button><a href="/logout">Logout</a></button>
+        </div>
+
+        <div class='main_page'>
+            <div class='left_half'>
+                <button><a href="/register_page">Register</a></button>
+                <!-- <button><a href="/login_page">Login</a></button> -->
+                <!-- <button action="/login_page">Login</button> -->
+                <!-- <button action="/login_page">Login</button> -->
+                <h1>Welcome Home! The blog will be shown below</h1>
+            </div>
+
+
+
+            <div class='right_half'>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
