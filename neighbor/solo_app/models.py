@@ -160,8 +160,8 @@ class ItemManager(models.Manager):
             errors['item_brand'] = "The brand name must be at least 2 characters long."
         if len(postData['product_name']) < 8:
             errors['product_name'] = "Product name must be at least 8 characters long."
-        if len(postData['item_description']) >50:
-            errors['item_description'] = "The description must be less than 50 characters long."
+        if len(postData['item_description']) >250:
+            errors['item_description'] = "The description must be less than 250 characters long."
 
         return errors
     def updateme(self, postData):
@@ -184,18 +184,18 @@ class ItemManager(models.Manager):
             errors['item_brand'] = "The brand name must be at least 2 characters long."
         if len(postData['product_name']) < 8:
             errors['product_name'] = "Product name must be at least 8 characters long."
-        if len(postData['item_description']) >50:
-            errors['item_description'] = "The description must be less than 50 characters long."
+        if len(postData['item_description']) >250:
+            errors['item_description'] = "The description must be less than 250 characters long."
 
 
 class Item(models.Model):
     product_name = models.CharField(max_length=45)
-    item_description = models.CharField(max_length=50)
+    item_description = models.CharField(max_length=250)
     item_price = models.IntegerField(max_length=8)
     contact_info = models.CharField(max_length=255)
     item_brand = models.CharField(max_length=45)
     owner = models.ForeignKey(User, related_name="has_created_item", on_delete=models.CASCADE)
-    sold = models.ManyToManyField(User, related_name="user_sold_item")
+    sold = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
@@ -222,3 +222,8 @@ class Question(models.Model):
     updated_at = models.DateField(auto_now=True)
 
     objects = QueManager()
+
+class Avatar(models.Model):
+    location = models.CharField(max_length=455)
+    avatar_Main_Img = models.ImageField(upload_to='../static/img/')
+    creator = models.ForeignKey(User, related_name="whos_avatar", on_delete=models.CASCADE)

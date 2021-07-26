@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{this_user.first_name}}s' Information</title>
+</head>
+
+<body>
+    <div class='wrapper'>
+
+        <div class='header'>
+            <h1>{{ this_user.first_name }} {{ this_user.last_name }}'</h1>
+            <button><a href="/home">Go Back</a></button>
+            <button><a href="/logout">Log Out</a></button>
+        </div>
+
+        <div class='main_page'>
+            <div class='left_half'>
+                <h1>Quotes</h1>
+                <ul>
+                    {% for each_quote in this_user.has_created_quote.all %}
+                    <h3>{{each_quote.q_text}} -by {{each_quote.author}}</h3>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class='right_half'>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Made by your neighbor in Cypress, TX. © MyNeighbor 2021.</p>
+    </div>
+
+</body>
+
+</html>

@@ -6,64 +6,79 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to my neighborhood</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Welcome to MyNeighbor</title>
 </head>
 
-<body>
-    <div class='wrapper'>
-
-        <div class='header'>
-            <h1>Welcome back, {{user.first_name}}</h1>
-            <button><a href="/logout">Logout</a></button>
+<body class="blog-img">
+    <div class='header'>
+        <h1>Welcome back, {{user.first_name}}</h1>
+        <div class="nav-bar">
+            <a class="b-menu" href="/marketplace">Marketplace</a>
+            <a class="b-menu" href="/my_account/{{user.id}}">My Account</a>
+            <a class="b-menu" href="/invite">Invite</a>
+            <a class="b-menu" href="/help">Contact us</a>
+            <a class="b-menu" href="/logout">Log Out</a>
         </div>
+    </div>
+    <div class='main-container'>
+        <div class='right_half'>
 
-        <div class='main_page'>
-            <div class='left_half'>
-
-                <h1>Welcome Home! The blog will be shown below</h1>
-            </div>
-            <button><a href="/help">Contact Us</a></button>
-            <button><a href="/marketplace">Marketplace</a></button>
-            <button><a href="/my_account/{{user.id}}">My Account</a></button>
-            <button><a href="/invite">Invite</a></button>
             <ul>
                 {% for post in all_posts %}
-                <h3>{{post.title}} -make it bold ---- then text: {{post.b_text}}</h3>
-                <p>Posted by <a href="/user/{{post.creator.id}}">{{post.creator.first_name}}
-                        {{post.creator.last_name}}</a> on {{post.updated_at}}</p>
-                {% if post.creator.id == request.session.user_id %}
-                <form action='/home/delete_post/{{post.id}}' method="POST">
-                    {% csrf_token %}
-                    <button>Delete this post</button>
-                </form>
-                {% endif %}
-                <p>{{post.liked_by.count}} people like this</p>
-                {% if user not in post.liked_by.all %}
-                <p><a href='/home/like_post/{{post.id}}'>Like!</a></p>
-                {% else %}
-                <p>You liked it! <a href='/home/dislike_post/{{post.id}}'>Dislike!</a></p>
-                {% endif %}
+                <li class="blog-card">
+
+                    <div class="text-card">
+
+                        <h3 class="descr">{{post.title}}</h3>
+                        <h4>{{post.b_text}}</h4>
+                        <h5>Posted by <a href="/user/{{post.creator.id}}">{{post.creator.first_name}}
+                                {{post.creator.last_name}}</a> on {{post.updated_at}}
+                            {% if post.creator.id == request.session.user_id %}</h5>
+                        <form action='/home/delete_post/{{post.id}}' method="POST">
+                            {% csrf_token %}
+                            <button class="delete">Delete</button>
+                        </form>
+                        {% endif %}</p>
+                        <p>{{post.liked_by.count}} people liked it</p>
+                        {% if user not in post.liked_by.all %}
+                        <p><a class="b-menu" href='/home/like_post/{{post.id}}'>Like!</a></p>
+                        {% else %}
+                        <a class="b-menu" href='/home/dislike_post/{{post.id}}'>Dislike!</a>
+                        {% endif %}
+
+                    </div>
+
+                </li>
                 {% endfor %}
             </ul>
         </div>
-        <div class='right_half'>
+        <div class='left_half'>
             <h1>Add a Post!</h1>
-            <form action='home/create_post' method="POST">
+
+            <form class="form1" action='home/create_post' method="POST">
                 {% csrf_token %}
                 {% for message in messages %}
-                <p class="text-danger small">{{ message }}</p>
+                <p class="error-messages">{{ message }}</p>
                 {% endfor %}
-                <div class='cell'>
-                    <label>Title: <input type='textarea' name='title'></label>
-                    <label>Post:</label>
-                    <textarea name="b_text" cols="30" rows="6"></textarea>
-                    <input type="submit" value="Submit">
+                <div >
+                    <div>
+                        <label>Title:</label>
+                    </div>
+                    <input class="un1" type='textarea' name='title'>
+                    <div>
+                        <label>Post:</label>
+                    </div>
+                    <textarea class="un1" name="b_text" cols="30" rows="6"></textarea>
+                    <input class="submit" type="submit" value="Submit">
                 </div>
             </form>
         </div>
-
     </div>
+    <div class="footer">
+        <p>Made by your neighbor in Cypress, TX. © MyNeighbor 2021.</p>
     </div>
 </body>
 

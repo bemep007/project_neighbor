@@ -6,43 +6,54 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{item.product_name}}</title>
 </head>
 
-<body>
-    <div class='wrapper'>
-        <div class='header'>
-            <h1>{{item.product_name}}</h1>
-            <button><a href="/marketplace">Go Back</a></button>
-            <button><a href="/logout">Log Out</a></button>
-        </div>
-        <div class='main_page'>
-            <div class='left_half'>
-                    <div>
-                        <label>Product Name</label>
-                        <p>{{item.product_name}}</p>
-                    </div>
-                    <div>
-                        <label>Brand</label>
-                        <p>{{item.item_brand}}</p>
-                    </div>
-                    <div>
-                        <label>Description</label>
-                        <p>{{item.item_description}}</p>
-                    </div>
-                    <div>
-                        <label>Price</label>
-                        <p>${{item.item_price}}</p>
-                    </div>
-                    <div>
-                        <label>Contact Information</label>
-                        <p>{{item.owner.first_name}} {{item.owner.last_name}}: {{item.contact_info}}</p>
-                    </div>
-            </div>
-            
+<body class="marketplace">
+    <div class='header'>
+        <h1>{{item.product_name}}</h1>
+        <div class="nav-bar">
+            <a class="b-menu" href="/marketplace">Go Back</a>
+            <a class="b-menu" href="/logout">Log Out</a>
         </div>
     </div>
+
+    <div class='left_half'>
+        <div class="item_info">
+            <label>Product Name: </label>
+            <p>{{item.product_name}}</p>
+        </div>
+        <div class="item_info">
+            <label>Brand: </label>
+            <p>{{item.item_brand}}</p>
+        </div>
+        <div class="item_info">
+            <label>Description:  </label>
+            <p>{{item.item_description}}</p>
+        </div>
+        <div class="item_info">
+            <label>Price: </label>
+            <p>${{item.item_price}}</p>
+        </div>
+        <div class="item_info">
+            <label>Contact Information: </label>
+            <p>{{item.owner.first_name}} {{item.owner.last_name}}: {{item.contact_info}}</p>
+        </div>
+        <div class="item_info">
+
+            <label>Status:</label>
+
+            {% if item.sold == False %}
+            <label>Available</label>
+            {% elif item.sold == True %}
+            <label>Sold!</label>
+            {% endif %}
+        </div>
+    </div>
+
 </body>
 
 </html>

@@ -6,52 +6,55 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Invitation</title>
 </head>
 
 <body>
-    <div class='wrapper'>
 
-        <div class='header'>
-            <h1>Invite your neighbors</h1>
-            <button><a href="/home">Go Back</a></button>
-            <button><a href="/logout">Log Out</a></button>
+    <div class='header'>
+        <h1>Invite your neighbors!</h1>
+        <div class="nav-bar">
+
+            <a class="b-menu" href="/home">Go Back</a>
+            <a class="b-menu" href="/logout">Log Out</a>
+        </div>
+    </div>
+    <div class='left_half'>
+
             {% if messages %}
-            <ul class="messages">
+            <ul class="error-messages">
                 {% for message in messages %}
                 <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
                 {% endfor %}
             </ul>
             {% endif %}
-        </div>
-
-        <div class='main_page'>
-            <div class='left_half'>
-                <h2>Tell us about your neighbor</h2>
-                <form action="invite/done" method="POST">
+                <h2>Your neighbor's information:</h2>
+                <form class="form1" action="invite/done" method="POST">
                     {% csrf_token %}
-                    <div>
-                        <label for="first_name">First Name</label>
-                        <input type="text" name="first_name">
+                    <div class="invite">
+                        <label for="first_name">First Name: </label>
+                        <input class="un4" type="text" name="first_name">
                     </div>
-                    <div>
-                        <label for="last_name">Last Name</label>
-                        <input type="text" name="last_name">
+                    <div class="invite">
+                        <label for="last_name">Last Name: </label>
+                        <input class="un4" type="text" name="last_name">
                     </div>
-                    <div>
-                        <label for="email">Email</label>
-                        <input type="email" name="email">
+                    <div class="invite">
+                        <label for="email">Email: </label>
+                        <input class="un4" type="email" name="email">
                     </div>
-                    <div>
-                        <label for="street_address">Street Address</label>
-                        <input type="text" name="street_address">
+                    <div class="invite">
+                        <label for="street_address">Street Address: </label>
+                        <input class="un4" type="text" name="street_address">
                     </div>
-                    <div>
-                        <label for="zip_code">Zip Code</label>
-                        <input type="text" name="zip_code">
+                    <div class="invite">
+                        <label for="zip_code">Zip Code: </label>
+                        <input class="un4" type="text" name="zip_code">
                     </div>
-                    <button>Send</button>
+                    <button class="submit" >Send invite!</button>
                 </form>
             </div>
 
@@ -59,6 +62,7 @@
             
         </div>
     </div>
+
 </body>
 
 </html>

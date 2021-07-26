@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+
+<body >
+    <div class='wrapper'>
+
+        <div class='header'>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
+        <div class='form-signin'>
+                <h2>Login</h2>
+                <form action="/login" method="POST">
+                    {% csrf_token %}
+                    <div>
+                        <label>Email</label>
+                        <input type="email" name="email">
+                    </div>
+                    <div>
+                        <label>Password</label>
+                        <input type="password" name="password">
+                    </div>
+
+
+                    <button>Login</button>
+                    
+                </form>
+                <!-- <button><a href="/password_page">Forgot Password</a></button> -->
+                <button><a href="/">Back</a></button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

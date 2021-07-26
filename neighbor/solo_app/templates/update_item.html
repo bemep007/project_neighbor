@@ -6,53 +6,65 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{item.product_name}}</title>
 </head>
 
-<body>
-    <div class='wrapper'>
-        <div class='header'>
-            <h1>{{item.product_name}}</h1>
-            <button><a href="/home">Go Back</a></button>
-            <button><a href="/logout">Log Out</a></button>
-        </div>
-        <div class='main_page'>
-            <div class='left_half'>
-                {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-                <form action="/marketplace/updated/{{item.id}}" method="POST">
-                    {% csrf_token %}
-                    <div>
-                        <label>Product Name</label>
-                        <input type="product_name" name="product_name" value="{{item.product_name}}">
-                    </div>
-                    <div>
-                        <label>Brand</label>
-                        <input type="item_brand" name="item_brand" value="{{item.item_brand}}">
-                    </div>
-                    <div>
-                        <label>Description</label>
-                        <input type="item_description" name="item_description" value='{{item.item_description}}'>
-                    </div>
-                    <div>
-                        <label>Price</label>
-                        <input type="item_price" name="item_price" value="{{item.item_price}}">
-                    </div>
-                    <div>
-                        <label>Contact Information</label>
-                        <input type="contact_info" name="contact_info" value="{{item.contact_info}}">
-                    </div>
-                    <button>Update</button>
-            </div>
-            
+<body class="marketplace">
+    <div class='header'>
+        <h1>{{item.product_name}}</h1>
+        <div class="nav-bar">
+            <a class="b-menu" href="/marketplace">Go Back</a>
+            <a class="b-menu" href="/logout">Log Out</a>
         </div>
     </div>
+    <div class='left_half'>
+        {% if messages %}
+        <ul class="error-messages">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form class="form1" action="/marketplace/updated/{{item.id}}" method="POST">
+            {% csrf_token %}
+            <div class="invite">
+                <label>Product Name</label>
+                <input class="un5" type="product_name" name="product_name" value="{{item.product_name}}">
+            </div>
+            <div class="item_info">
+                <label>Brand</label>
+                <input class="un5" type="item_brand" name="item_brand" value="{{item.item_brand}}">
+            </div>
+            <div class="item_info">
+                <label>Description</label>
+                <input class="un5" type="item_description" name="item_description" value='{{item.item_description}}'>
+            </div>
+            <div class="item_info">
+                <label>Price</label>
+                <input class="un5" type="item_price" name="item_price" value="{{item.item_price}}">
+            </div>
+            <div class="item_info">
+                <label>Contact Information</label>
+                <input class="un5" type="contact_info" name="contact_info" value="{{item.contact_info}}">
+            </div>
+            {% if item.sold == False %}
+            <div class="item_info">
+                <label>Mark it as Sold?</label>
+                <input class="un5" type="sold" name="sold" value="{{item.sold}}">
+            </div>
+            {% elif item.sold == True %}
+            <div class="item_info">
+                <label>Mark it as Sold?</label>
+                <input class="un5" type="sold" name="sold" value="{{item.sold}}">
+            </div>
+            {% endif %}
+            <button class="submit">Update</button>
+    </div>
+
+
 </body>
 
 </html>

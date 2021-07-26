@@ -6,65 +6,91 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>My Account</title>
 </head>
 
-<body>
-    <div class='wrapper'>
-        <div class='header'>
-            <h1>Edit my account</h1>
-            <button><a href="/home">Go Back</a></button>
-            <button><a href="/logout">Log Out</a></button>
+<body class="account-img">
+
+    <div class='header'>
+        <h1>My Account</h1>
+        <div class="nav-bar">
+
+            <a class="b-menu" href="/home">Go Back</a>
+            <a class="b-menu" href="/logout">Log Out</a>
         </div>
-        <div class='main_page'>
+    </div>
+
+    <div class='main-container'>
+
             <div class='left_half'>
+
+                <img class="image-avatar" src="../static/img/no_avatar.png" alt="no_avatar">
+                <div class="form-group">
+                    <label for="formFile" class="form-label mt-4">Upload your picture</label>
+                    <input class="form-control" type="file" id="formFile">
+                </div>
                 {% if messages %}
-                <ul class="messages">
+                <ul class="error-messages">
                     {% for message in messages %}
                     <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
                     {% endfor %}
                 </ul>
                 {% endif %}
-                <form action="/my_account/{{user.id}}/update" method="POST">
+                <form class="form1" action="/my_account/{{user.id}}/update" method="POST">
                     {% csrf_token %}
-                    <div>
-                        <label>First Name</label>
-                        <input type="first_name" name="first_name" value="{{user.first_name}}">
+                    <div class="acc-info">
+                        <label>First Name: </label>
+                        <input class="un2" type="first_name" name="first_name" value="{{user.first_name}}">
                     </div>
-                    <div>
-                        <label>Last Name</label>
-                        <input type="last_name" name="last_name" value="{{user.last_name}}">
+                    <div class="acc-info">
+                        <label>Last Name: </label>
+                        <input class="un2" type="last_name" name="last_name" value="{{user.last_name}}">
                     </div>
-                    <div>
-                        <label>Email</label>
-                        <input type="email" name="email" value='{{user.email}}'>
+                    <div class="acc-info">
+                        <label>Email: </label>
+                        <input class="un2" type="email" name="email" value='{{user.email}}'>
                     </div>
-                    <div>
-                        <label>Street Address</label>
-                        <input type="street_address" name="street_address" value="{{user.street_address}}">
+                    <div class="acc-info">
+                        <label>Street Address: </label>
+                        <input class="un2" type="street_address" name="street_address" value="{{user.street_address}}">
                     </div>
-                    <div>
-                        <label>Zipcode</label>
-                        <input type="zip_code" name="zip_code" value="{{user.zip_code}}">
+                    <div class="acc-info">
+                        <label>Zipcode: </label>
+                        <input class="un2" type="zip_code" name="zip_code" value="{{user.zip_code}}">
                     </div>
-                    <button>Update</button>
+                    <button class="submit" >Update</button>
             </div>
             <div class='right_half'>
-                <h1>Invited neighbors</h1>
-                <ul>
+                <h1>My invitations:</h1>
+                <ul class="account_card">
                     {% for each_invite in user.has_invited_neighbor.all %}
                     <h3>{{each_invite.first_name}} {{each_invite.last_name}} on {{each_invite.street_address}}</h3>
                     {% endfor %}
                 </ul>
-                <h1>Questions Asked</h1>
-                <ul>
+                <h1>My Questions:</h1>
+                <ul class="account_card">
                     {% for each_question in user.asked_question.all %}
                     <h3>{{each_question.title}} {{each_question.q_text}} on {{each_question.created_at}}</h3>
                     {% endfor %}
                 </ul>
+                <h1>My Items:</h1>
+                <ul class="account_card">
+                    {% for item in user.has_created_item.all %}
+
+                    {% if item.sold == True %}
+                    <h3>{{item.product_name}} - Status: SOLD!</h3>
+                    {% elif item.sold == False %}
+                    <h3>{{item.product_name}} - Status: Available</h3>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
             </div>
-        </div>
+    </div>
+    <div class="footer">
+        <p>Made by your neighbor in Cypress, TX. © MyNeighbor 2021.</p>
     </div>
 </body>
 

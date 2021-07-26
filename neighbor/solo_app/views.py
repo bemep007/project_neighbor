@@ -1,7 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages, auth
 from .models import Invited, User, Blogpost, Item, Question
-
 
 
 # LOGIN portion of the app.
@@ -10,7 +9,7 @@ def index(request):
 
 def index_authorized(request):
     context ={
-        'all_posts': Blogpost.objects.all().order_by('created_at')[:13],
+        'all_posts': Blogpost.objects.all().order_by('-created_at')[:13],
         'user': User.objects.get(id=request.session['user_id']),
     }
     return render(request, 'blog.html', context)
@@ -28,7 +27,7 @@ def register(request):
     if errors:
         for e in errors.values():
             messages.error(request, e)
-        return redirect('/')
+        return redirect('/register_page')
     else:
         new_user = User.objects.register(request.POST)
         request.session['user_id'] = new_user.id
@@ -123,9 +122,16 @@ def dislike_post(request, post_id):
 # Account portion of the app.
 
 def my_account(request, user_id):
-    context = {
-        'user': User.objects.get(id=user_id),
-    }
+    try:
+        context = {
+            'user': User.objects.get(id=user_id),
+            'all_items': Item.objects.get(owner=user_id),
+        }
+    except:
+        context = {
+            'user': User.objects.get(id=user_id),
+            'all_items': None
+        }
     return render(request, 'my_account.html', context)
 
 def update_account(request, user_id):
@@ -218,6 +224,7 @@ def item_updated(request, item_id):
         update_this_item.item_price = request.POST['item_price']
         update_this_item.contact_info = request.POST['contact_info']
         update_this_item.item_brand = request.POST['item_brand']
+        update_this_item.sold = request.POST['sold']
         update_this_item.save()
     return redirect(f'/marketplace/update_item/{item_id}')
 
@@ -229,11 +236,13 @@ def delete_item(request, item_id):
     return redirect('/marketplace')
 
 def mark_sold(request, item_id):
-    user = User.objects.get(id=request.session["user_id"])
+    if request.method =='GET':
+        return redirect('/')
     item = Item.objects.get(id=item_id)
-    user.user_sold_item.add(item)
+    item.sold = True
+    item.save()
 
-    return redirect('/home')
+    return redirect(f'/marketplace')
 
 # more information about the item
 def item_info(request, item_id):

@@ -6,95 +6,115 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Marketplace</title>
 </head>
 
-<body>
-    <div class='wrapper'>
+<body class="marketplace">
 
-        <div class='header'>
-            <h1>Welcome to the Marketplace, {{user.first_name}}</h1>
-            <button><a href="/logout">Logout</a></button>
+    <div class='header'>
+        <h1>Welcome to the Marketplace, {{user.first_name}}</h1>
+        <div class="nav-bar">
+            <a class="b-menu" href="/home">Blog</a>
+            <a class="b-menu" href="/my_account/{{user.id}}">My Account</a>
+            <a class="b-menu" href="/invite">Invite</a>
+            <a class="b-menu" href="/help">Contact us</a>
+            <a class="b-menu" href="/logout">Log Out</a>
+        </div>
+    </div>
+
+
+    <div class='main-container'>
+        <div class='right_half'>
+
+            <ul>
+                {% for each_item in all_items %}
+                <li class="blog-card">
+                    <div class="item-card">
+                        <img class="image-item" src="../static/img/puma.jpeg">
+
+                        <h3 class="descr">
+                            {{each_item.product_name}} by {{each_item.item_brand}}
+                            <div>
+                                Description:
+                            </div>
+                            <div>
+                                {{each_item.item_description}}
+                            </div>
+                            {% if each_item.owner.id == request.session.user_id %}
+                            <div class="buttons">
+                                <form action='/marketplace/delete_item/{{each_item.id}}' method="POST">
+                                    {% csrf_token %}
+                                    <button class="b-menu">Delete</button>
+                                </form>
+                                <form action='/marketplace/update_item/{{each_item.id}}' method="POST">
+                                    {% csrf_token %}
+                                    <button class="b-menu">Update</button>
+                                </form>
+                                {% if each_item.sold == False %}
+                                <form action='/marketplace/mark_sold/{{each_item.id}}' method="POST">
+                                    {% csrf_token %}
+                                    <button class="b-menu">Mark as Sold!</button>
+                                </form>
+                                {% endif %}
+                                <a class="b-menu" href="/marketplace/{{each_item.id}}">More</a>
+                                {% else %}
+                                <a class="b-menu" href="/marketplace/{{each_item.id}}">More</a>
+                            </div>
+
+                            {% endif %}
+
+                        </h3>
+                        {% endfor %}
+                    </div>
+                </li>
+            </ul>
         </div>
 
-        <div class='main_page'>
-            <div class='left_half'>
-                <button><a href="/help">Contact Us</a></button>
-                <button><a href="/home">Blog</a></button>
-                <button><a href="/my_account/{{user.id}}">My Account</a></button>
-                <button><a href="/invite">Invite</a></button>
-                <h1>All items are listed below</h1>
-            </div>
 
+        <div class='left_half'>
+            <h1>List your item!</h1>
             {% if messages %}
-            <ul class="messages">
+            <ul class="error-messages">
                 {% for message in messages %}
                 <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
                 {% endfor %}
             </ul>
             {% endif %}
-            <ul>
-                {% for each_item in all_items %}
-                <h3>
-                    Name: {{each_item.product_name}}/Brand: {{each_item.item_brand}} 
-                    Description: {{each_item.item_description}} 
-                    listed for ${{each_item.item_price}} 
-                    by: {{each_item.owner.first_name}} 
-                    contact info: {{each_item.contact_info}}
-                    
-                    {% if each_item.owner.id == request.session.user_id %}
-                    <form action='/marketplace/delete_item/{{each_item.id}}' method="POST">
-                    {% csrf_token %}
-                    <button>Delete</button>
-                    </form>
-                    <form action='/marketplace/update_item/{{each_item.id}}' method="POST">
-                    {% csrf_token %}
-                    <button>Update</button>
-                    </form>
-                    {% endif %}
-                    <button><a href="/marketplace/{{each_item.id}}">More</a></button>
-                </h3>
-                {% endfor %}
-            </ul>
-            <h1>Add a product to sell</h1>
-            <form action="/marketplace/create_item" method="POST">
+
+            <form class="form1" action="/marketplace/create_item" method="POST">
                 {% csrf_token %}
-                <div>
+                <div class="acc-info">
                     <label>Product Name</label>
-                    <input type="product_name" name="product_name">
+                    <input class="un4" type="product_name" name="product_name">
                 </div>
-                <div>
+                <div class="acc-info">
                     <label>Brand</label>
-                    <input type="item_brand" name="item_brand">
+                    <input class="un4" type="item_brand" name="item_brand">
                 </div>
-                <div>
+                <div class="acc-info">
                     <label>Description</label>
-                    <input type="item_description" name="item_description">
+                    <textarea class="un4" type="item_description" name="item_description"></textarea>
                 </div>
-                <div>
+                <div class="acc-info">
                     <label>Price</label>
-                    <input type="item_price" name="item_price">
+                    <input class="un4" type="item_price" name="item_price">
                 </div>
-                <div>
+                <div class="acc-info">
                     <label>Contact Information</label>
-                    <input type="contact_info" name="contact_info">
+                    <input class="un4" type="contact_info" name="contact_info">
                 </div>
-                <!-- {% if user not in item.user_sold_item.all %}
-                    <div>
-                        <label>Sold?</label>
-                        <input type="item_brand" name="item_brand" >
-                    </div>
-                    <p><a href='/marketplace/mark_sold/{{item.id}}'>Sold!</a></p>
-                    {% endif %} -->
-                <button>Add</button>
+                <button class="submit">Add</button>
         </div>
-        <div class='right_half'>
-
-        </div>
-
     </div>
+    
+    <div class="footer">
+        <p>Made by your neighbor in Cypress, TX. © MyNeighbor 2021.</p>
     </div>
+
+
 </body>
 
 </html>

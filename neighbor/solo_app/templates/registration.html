@@ -2,70 +2,67 @@
 <html lang="en">
 
 <head>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
-</head>
+
+    <head>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>Registration</title>
+    </head>
 
 <body>
-    <div class='wrapper'>
+    <div class='main-reg'>
 
-        <div class='header'>
-            <h1>Registration</h1>
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
+        <p class="sign">Registration</p>
+        {% if messages %}
+        <ul class="error-messages">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
-        <div class='main_page'>
-            <div class='left_half'>
-                <h2>Register</h2>
-                <form action="/register" method="POST">
-                    {% csrf_token %}
-                    <div>
-                        <label for="first_name">First Name</label>
-                        <input type="text" name="first_name">
-                    </div>
-                    <div>
-                        <label for="last_name">Last Name</label>
-                        <input type="text" name="last_name">
-                    </div>
-                    <div>
-                        <label for="email">Email</label>
-                        <input type="email" name="email">
-                    </div>
-                    <div>
-                        <label for="password">Password</label>
-                        <input type="password" name="password">
-                    </div>
-                    <div>
-                        <label for="confirm">Confirm Password</label>
-                        <input type="password" name="confirm">
-                    </div>
-                    <div>
-                        <label for="street_address">Street Address</label>
-                        <input type="text" name="street_address">
-                    </div>
-                    <div>
-                        <label for="zip_code">Zip Code</label>
-                        <input type="text" name="zip_code">
-                    </div>
-                    <button>Register</button>
-                </form>
-                <button><a href="/">Back</a></button>
+
+        <form class="form2" action="/register" method="POST">
+            {% csrf_token %}
+            <div class="reg1">
+                <p for="first_name">First Name</p>
+                <input class="un1" type="text" name="first_name">
             </div>
-
-
-            
-        </div>
+            <div class="reg1">
+                <p for="last_name">Last Name</p>
+                <input class="un1" type="text" name="last_name">
+            </div>
+            <div class="reg1">
+                <p for="email">Email</p>
+                <input class="un1" type="email" name="email">
+            </div>
+            <div class="reg1">
+                <p for="password">Password</p>
+                <input class="un1" type="password" name="password">
+            </div>
+            <div class="reg1">
+                <p for="confirm">Confirm Password</p>
+                <input class="un1" type="password" name="confirm">
+            </div>
+            <div class="reg1">
+                <p for="street_address">Street Address</p>
+                <input class="un1" type="text" name="street_address">
+            </div>
+            <div class="reg1">
+                <p for="zip_code">Zip Code</p>
+                <input class="un1" type="text" name="zip_code">
+            </div>
+            <button class="submit">Register</button>
+        </form>
+        <a class="back" href="/">Back</a>
     </div>
+
 </body>
 
 </html>

@@ -6,16 +6,18 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Question sent</title>
 </head>
 
 <body>
     <h1>Your feedback is important!</h1>
-    <h1>Do you have another question/feedback?</h1>
-    <button><a href="/help">Yes!</a></button>
-    <button><a href="/home">No</a></button>
-    <button><a href="/logout">Log Out</a></button>
+    <h1 class="confirm">Do you have another question/feedback?</h1>
+    <a class="b-menu" href="/help">Yes</a>
+    <a class="b-menu" href="/home">No</a>
+
 </body>
 
 </html>
