@@ -164,6 +164,7 @@ class ItemManager(models.Manager):
             errors['item_description'] = "The description must be less than 250 characters long."
 
         return errors
+        
     def updateme(self, postData):
         errors = {}
         if len(postData['item_brand']) < 1:
